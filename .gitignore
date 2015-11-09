@@ -1,6 +1,6 @@
-tmp/
-static/
-src/backend/config.js
+.tmp/
+build/
+app/backend/config.js
 
 bower_components/
 node_modules/

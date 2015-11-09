@@ -9,11 +9,11 @@ var router = express.Router();
 app.use(router);
 
 // static files
-router.use(express.static(config.basePath + 'static'));
+router.use(express.static(config.basePath + 'build'));
 
 // route: landing page
 router.use(function(req, res, next) {
-    res.sendFile(config.basePath + 'src/frontend/index.html');
+    res.sendFile(config.basePath + 'app/frontend/index.html');
 });
 
 // launch server
