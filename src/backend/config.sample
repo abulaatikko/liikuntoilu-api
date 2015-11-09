@@ -1,0 +1,8 @@
+var config = {};
+
+config.env = 'prod'; // dev, prod
+config.host = 'liikuntoilu.net';
+config.port = 3000;
+config.basePath = '/var/www/liikuntoilu.net';
+ 
+module.exports = config;

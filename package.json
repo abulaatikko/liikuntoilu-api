@@ -1,0 +1,30 @@
+{
+  "name": "liikuntoilu.net",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lassiheikkinen/liikuntoilu.git"
+  },
+  "author": "Lassi Heikkinen",
+  "license": "GPL-2.0",
+  "bugs": {
+    "url": "https://github.com/lassiheikkinen/liikuntoilu/issues"
+  },
+  "homepage": "https://github.com/lassiheikkinen/liikuntoilu#readme",
+  "dependencies": {
+    "bower": "^1.6.5",
+    "express": "^4.13.3",
+    "grunt": "^0.4.5",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-concat": "^0.5.1",
+    "grunt-contrib-copy": "^0.8.2",
+    "grunt-contrib-cssmin": "^0.14.0",
+    "grunt-contrib-jshint": "^0.11.3",
+    "grunt-contrib-uglify": "^0.10.0"
+  }
+}
