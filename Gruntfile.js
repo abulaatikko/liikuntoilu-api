@@ -20,6 +20,7 @@ module.exports = function(grunt) {
                     {src: '.tmp/vendor.concat.js', dest: 'build/app.js'},
                     {src: '.tmp/app.concat.css', dest: 'build/app.css'},
                     {expand: true, cwd: 'bower_components/bootstrap/', src: 'fonts/**', dest: 'build/'},
+                    {expand: true, cwd: 'app/frontend/', src: 'image/**', dest: 'build/'},
                 ]
             },
             dist: {
@@ -27,6 +28,7 @@ module.exports = function(grunt) {
                     {src: '.tmp/app.min.js', dest: 'build/app.js'},
                     {src: '.tmp/app.min.css', dest: 'build/app.css'},
                     {expand: true, cwd: 'bower_components/bootstrap/', src: 'fonts/**', dest: 'build/'},
+                    {expand: true, cwd: 'app/frontend/', src: 'image/**', dest: 'build/'},
                 ]
             }
         },
