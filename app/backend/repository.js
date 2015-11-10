@@ -4,7 +4,7 @@ var sequelize = require("sequelize");
 var orm = new sequelize(config.mysql.database, config.mysql.user, config.mysql.password, {
     host: config.mysql.host,
     dialect: 'mysql',
-    //logging: false
+    logging: config.debug ? console.log : false,
 });
 
 // models
