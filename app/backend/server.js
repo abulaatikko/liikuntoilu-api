@@ -16,9 +16,9 @@ app.use(router);
 // static files
 router.use(express.static(config.basePath + 'build'));
 
-router.use('/api/v1/participant', function(req, res, next) {
+router.use('/api/v1/participants', function(req, res, next) {
     req.getConnection(function(err, connection) {
-        connection.query('SELECT id, nick, active FROM participant', function(err, results) {
+        connection.query('SELECT id, name, active FROM participants', function(err, results) {
             if (err) {
                 return next(err);
             }
@@ -26,7 +26,7 @@ router.use('/api/v1/participant', function(req, res, next) {
             results.forEach(function(row, key) {
                 out.push({
                     id: row.id,
-                    name: row.nick,
+                    name: row.name,
                     active: row.active === 1 ? true : false
                 });
             });
@@ -35,9 +35,9 @@ router.use('/api/v1/participant', function(req, res, next) {
     });
 });
 
-router.use('/api/v1/event', function(req, res, next) {
+router.use('/api/v1/events', function(req, res, next) {
     req.getConnection(function(err, connection) {
-        connection.query('SELECT * FROM event', function(err, results) {
+        connection.query('SELECT * FROM events', function(err, results) {
             if (err) {
                 return next(err);
             }
@@ -55,27 +55,13 @@ router.use('/api/v1/event', function(req, res, next) {
     });
 });
 
-router.use('/api/v1/exercice', function(req, res, next) {
+router.use('/api/v1/exercices', function(req, res, next) {
     req.getConnection(function(err, connection) {
-        connection.query('SELECT id, date, time, nick, laji, raskaus, kommentti, matka, kesto FROM exercice LIMIT 100', function(err, results) {
+        connection.query('SELECT id, created, started, participant_id, event_id, pace, comment, distance, duration FROM exercices LIMIT 100000', function(err, results) {
             if (err) {
                 return next(err);
             }
-            var out = [];
-            results.forEach(function(row, key) {
-                out.push({
-                    id: row.id,
-                    created: row.date,
-                    started: row.time,
-                    participant_id: row.nick,
-                    event_id: row.laji,
-                    pace: row.raskaus,
-                    comment: row.kommentti,
-                    distance: row.matka,
-                    duration: row.kesto
-                });
-            });
-            return res.json(out);
+            return res.json(results);
         });
     });
 });
