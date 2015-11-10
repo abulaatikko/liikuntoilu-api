@@ -1,95 +1,37 @@
+// init app
 var express = require('express');
 var app = express();
-var mysql = require('mysql');
-var sequelizeCore = require("sequelize");
 
 // config
 var config = require('./config');
 
-// mysql
-var sequelize = new sequelizeCore(config.mysql.database, config.mysql.user, config.mysql.password, {
-    host: config.mysql.host,
-    dialect: 'mysql',
-    //logging: false
-});
-
-// models
-var models = {};
-models.participant = sequelize.define('participants', {
-    name: {
-        type: sequelizeCore.STRING,
-    },
-    active: {
-        type: sequelizeCore.BOOLEAN,
-    },
-}, {
-    timestamps: false,
-});
-models.event = sequelize.define('events', {
-    name: {
-        type: sequelizeCore.STRING,
-    },
-    active: {
-        type: sequelizeCore.BOOLEAN,
-    },
-    default_speed: {
-        type: sequelizeCore.INTEGER,
-    },
-}, {
-    timestamps: false,
-});
-models.exercice = sequelize.define('exercices', {
-    created: {
-        type: sequelizeCore.DATE,
-    },
-    started: {
-        type: sequelizeCore.DATE,
-    },
-    participant_id: {
-        type: sequelizeCore.INTEGER,
-    },
-    event_id: {
-        type: sequelizeCore.INTEGER,
-    },
-    pace: {
-        type: sequelizeCore.INTEGER,
-    },
-    comment: {
-        type: sequelizeCore.TEXT,
-    },
-    distance: {
-        type: sequelizeCore.INTEGER,
-    },
-    duration: {
-        type: sequelizeCore.INTEGER,
-    },
-}, {
-    timestamps: false,
-});
+// repository
+var repository = require('./repository');
 
 // router
 var router = express.Router();
 app.use(router);
 
-
-
 // static files
 router.use(express.static(config.basePath + 'build'));
 
+// route: api: participants
 router.use('/api/v1/participants', function(req, res, next) {
-    models.participant.findAll().then(function(participants) {
+    repository.models.participant.findAll().then(function(participants) {
         return res.json(participants);
     });
 });
 
+// route: api: events
 router.use('/api/v1/events', function(req, res, next) {
-    models.event.findAll().then(function(events) {
+    repository.models.event.findAll().then(function(events) {
         return res.json(events);
     });
 });
 
+// route: api: exercices
 router.use('/api/v1/exercices', function(req, res, next) {
-    models.exercice.findAll().then(function(exercices) {
+    repository.models.exercice.findAll().then(function(exercices) {
         return res.json(exercices);
     });
 });
@@ -100,7 +42,7 @@ router.use(function(req, res, next) {
 });
 
 // launch server
-sequelize.sync().then(function () {
+repository.orm.sync().then(function () {
     exports.server = app.listen(config.port, function() {
         console.log('Listening on port %d', exports.server.address().port);
     });
