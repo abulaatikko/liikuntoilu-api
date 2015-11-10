@@ -4,5 +4,12 @@ config.env = 'prod'; // dev, prod
 config.host = 'liikuntoilu.net';
 config.port = 3000;
 config.basePath = '/var/www/liikuntoilu.net';
+
+// mysql
+config.mysql = {};
+config.mysql.host = 'localhost';
+config.mysql.database = 'liikuntoilu';
+config.mysql.user = 'liikuntoilu';
+config.mysql.password = '';
  
 module.exports = config;
