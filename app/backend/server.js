@@ -1,68 +1,96 @@
 var express = require('express');
 var app = express();
 var mysql = require('mysql');
-var myConnection = require('express-myconnection');
+var sequelizeCore = require("sequelize");
 
 // config
 var config = require('./config');
 
 // mysql
-app.use(myConnection(mysql, config.mysql, 'pool'));
+var sequelize = new sequelizeCore(config.mysql.database, config.mysql.user, config.mysql.password, {
+    host: config.mysql.host,
+    dialect: 'mysql',
+    //logging: false
+});
+
+// models
+var models = {};
+models.participant = sequelize.define('participants', {
+    name: {
+        type: sequelizeCore.STRING,
+    },
+    active: {
+        type: sequelizeCore.BOOLEAN,
+    },
+}, {
+    timestamps: false,
+});
+models.event = sequelize.define('events', {
+    name: {
+        type: sequelizeCore.STRING,
+    },
+    active: {
+        type: sequelizeCore.BOOLEAN,
+    },
+    default_speed: {
+        type: sequelizeCore.INTEGER,
+    },
+}, {
+    timestamps: false,
+});
+models.exercice = sequelize.define('exercices', {
+    created: {
+        type: sequelizeCore.DATE,
+    },
+    started: {
+        type: sequelizeCore.DATE,
+    },
+    participant_id: {
+        type: sequelizeCore.INTEGER,
+    },
+    event_id: {
+        type: sequelizeCore.INTEGER,
+    },
+    pace: {
+        type: sequelizeCore.INTEGER,
+    },
+    comment: {
+        type: sequelizeCore.TEXT,
+    },
+    distance: {
+        type: sequelizeCore.INTEGER,
+    },
+    duration: {
+        type: sequelizeCore.INTEGER,
+    },
+}, {
+    timestamps: false,
+});
 
 // router
 var router = express.Router();
 app.use(router);
 
+
+
 // static files
 router.use(express.static(config.basePath + 'build'));
 
 router.use('/api/v1/participants', function(req, res, next) {
-    req.getConnection(function(err, connection) {
-        connection.query('SELECT id, name, active FROM participants', function(err, results) {
-            if (err) {
-                return next(err);
-            }
-            var out = [];
-            results.forEach(function(row, key) {
-                out.push({
-                    id: row.id,
-                    name: row.name,
-                    active: row.active === 1 ? true : false
-                });
-            });
-            return res.json(out);
-        });
+    models.participant.findAll().then(function(participants) {
+        return res.json(participants);
     });
 });
 
 router.use('/api/v1/events', function(req, res, next) {
-    req.getConnection(function(err, connection) {
-        connection.query('SELECT * FROM events', function(err, results) {
-            if (err) {
-                return next(err);
-            }
-            var out = [];
-            results.forEach(function(row, key) {
-                out.push({
-                    id: row.id,
-                    name: row.name,
-                    active: row.active === 1 ? true : false,
-                    default_speed: row.default_speed
-                });
-            });
-            return res.json(out);
-        });
+    models.event.findAll().then(function(events) {
+        return res.json(events);
     });
 });
 
 router.use('/api/v1/exercices', function(req, res, next) {
-    req.getConnection(function(err, connection) {
-        connection.query('SELECT id, created, started, participant_id, event_id, pace, comment, distance, duration FROM exercices LIMIT 100000', function(err, results) {
-            if (err) {
-                return next(err);
-            }
-            return res.json(results);
-        });
+    models.exercice.findAll().then(function(exercices) {
+        return res.json(exercices);
     });
 });
 
@@ -72,6 +100,8 @@ router.use(function(req, res, next) {
 });
 
 // launch server
-exports.server = app.listen(config.port, function() {
-    console.log('Listening on port %d', exports.server.address().port);
+sequelize.sync().then(function () {
+    exports.server = app.listen(config.port, function() {
+        console.log('Listening on port %d', exports.server.address().port);
+    });
 });
