@@ -15,6 +15,16 @@ app.use(router);
 // static files
 router.use(express.static(config.basePath + 'build'));
 
+['exercice_id', 'participant_id', 'event_id'].forEach(function(item) {
+    router.param(item, function(req, res, next, val) {
+        if (!isNaN(parseFloat(input)) && isFinite(input) && input >= 0) {
+            next();
+        } else {
+            res.sendStatus(403);
+        }
+    });
+});
+
 router.get('/participants/:exercice_id/exercices', function(req, res, next) {
     repository.models.participant.findById(req.params.exercice_id).then(function(participant) {
         participant.getExercices().then(function(exercices) {
