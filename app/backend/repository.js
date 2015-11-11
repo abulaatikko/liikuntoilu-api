@@ -18,6 +18,7 @@ models.participant = orm.define('participants', {
     },
 }, {
     timestamps: false,
+    underscored: true,
 });
 
 models.event = orm.define('events', {
@@ -32,6 +33,7 @@ models.event = orm.define('events', {
     },
 }, {
     timestamps: false,
+    underscored: true,
 });
 
 models.exercice = orm.define('exercices', {
@@ -61,7 +63,11 @@ models.exercice = orm.define('exercices', {
     },
 }, {
     timestamps: false,
+    underscored: true,
 });
+
+// relations
+models.participant.hasMany(models.exercice);
 
 module.exports = {
     models: models,
