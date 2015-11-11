@@ -15,7 +15,7 @@ app.use(router);
 // static files
 router.use(express.static(config.basePath + 'build'));
 
-router.use('/api/v1/participants/:exercice_id/exercices', function(req, res, next) {
+router.get('/participants/:exercice_id/exercices', function(req, res, next) {
     repository.models.participant.findById(req.params.exercice_id).then(function(participant) {
         participant.getExercices().then(function(exercices) {
             return res.json(exercices);
@@ -23,7 +23,7 @@ router.use('/api/v1/participants/:exercice_id/exercices', function(req, res, nex
     });
 });
 
-router.use('/api/v1/participants/:participant_id/events/:event_id/exercices', function(req, res, next) {
+router.get('/participants/:participant_id/events/:event_id/exercices', function(req, res, next) {
     repository.models.exercice.findAll({
         where: {
             participant_id: req.params.participant_id,
@@ -34,19 +34,19 @@ router.use('/api/v1/participants/:participant_id/events/:event_id/exercices', fu
     });
 });
 
-router.use('/api/v1/participants/:participant_id', function(req, res, next) {
+router.get('/participants/:participant_id', function(req, res, next) {
     repository.models.participant.findById(req.params.participant_id).then(function(participant) {
         return res.json(participant);
     });
 });
 
-router.use('/api/v1/participants', function(req, res, next) {
+router.get('/participants', function(req, res, next) {
     repository.models.participant.findAll().then(function(participants) {
         return res.json(participants);
     });
 });
 
-router.use('/api/v1/participants/:participant_id/events', function(req, res, next) {
+router.get('/participants/:participant_id/events', function(req, res, next) {
     repository.orm.query('SELECT DISTINCT A.* FROM events A JOIN exercices B ON (B.event_id = A.id) WHERE B.participant_id = :participant_id', {
         replacements: {
             participant_id: req.params.participant_id,
@@ -57,7 +57,7 @@ router.use('/api/v1/participants/:participant_id/events', function(req, res, nex
     });
 });
 
-router.use('/api/v1/events/:event_id/participants', function(req, res, next) {
+router.get('//events/:event_id/participants', function(req, res, next) {
     repository.orm.query('SELECT DISTINCT A.id, A.name, A.active FROM participants A JOIN exercices B ON (B.participant_id = A.id) WHERE B.event_id = :event_id', {
         replacements: {
             event_id: req.params.event_id,
@@ -68,7 +68,7 @@ router.use('/api/v1/events/:event_id/participants', function(req, res, next) {
     });
 });
 
-router.use('/api/v1/events/:event_id/exercices', function(req, res, next) {
+router.get('/events/:event_id/exercices', function(req, res, next) {
     repository.models.exercice.findAll({
         where: {
             event_id: req.params.event_id,
@@ -78,32 +78,34 @@ router.use('/api/v1/events/:event_id/exercices', function(req, res, next) {
     });
 });
 
-router.use('/api/v1/events/:event_id', function(req, res, next) {
+router.get('/events/:event_id', function(req, res, next) {
     repository.models.event.findById(req.params.event_id).then(function(event) {
         return res.json(event);
     });
 });
 
-router.use('/api/v1/events', function(req, res, next) {
+router.get('/events', function(req, res, next) {
     repository.models.event.findAll().then(function(events) {
         return res.json(events);
     });
 });
 
-router.use('/api/v1/exercices/:exercice_id', function(req, res, next) {
+router.get('/exercices/:exercice_id', function(req, res, next) {
     repository.models.exercice.findById(req.params.exercice_id).then(function(exercice) {
         return res.json(exercice);
     });
 });
 
-router.use('/api/v1/exercices', function(req, res, next) {
+router.get('/exercices', function(req, res, next) {
     repository.models.exercice.findAll().then(function(exercices) {
         return res.json(exercices);
     });
 });
 
+app.use('/api/v1/', router);
+
 // route: landing page
-router.use(function(req, res, next) {
+router.get('/', function(req, res, next) {
     res.sendFile(config.basePath + 'app/frontend/index.html');
 });
 
