@@ -15,60 +15,87 @@ app.use(router);
 // static files
 router.use(express.static(config.basePath + 'build'));
 
-// route: api: participants/:id/exercices
-router.use('/api/v1/participants/:id/exercices', function(req, res, next) {
-    repository.models.participant.findById(req.params.id).then(function(participant) {
+router.use('/api/v1/participants/:exercice_id/exercices', function(req, res, next) {
+    repository.models.participant.findById(req.params.exercice_id).then(function(participant) {
         participant.getExercices().then(function(exercices) {
             return res.json(exercices);
         });
     });
 });
 
-// route: api: participants/:id/events
-router.use('/api/v1/participants/:id/events', function(req, res, next) {
-    repository.models.participant.findById(req.params.id).then(function(participant) {
-        participant.getEvents().then(function(events) {
-            return res.json(events);
-        });
+router.use('/api/v1/participants/:participant_id/events/:event_id/exercices', function(req, res, next) {
+    repository.models.exercice.findAll({
+        where: {
+            participant_id: req.params.participant_id,
+            event_id: req.params.event_id,
+        }
+    }).then(function(exercices) {
+        return res.json(exercices);
     });
 });
 
-// route: api: participants/:id
-router.use('/api/v1/participants/:id', function(req, res, next) {
-    repository.models.participant.findById(req.params.id).then(function(participant) {
+router.use('/api/v1/participants/:participant_id', function(req, res, next) {
+    repository.models.participant.findById(req.params.participant_id).then(function(participant) {
         return res.json(participant);
     });
 });
 
-// route: api: participants
 router.use('/api/v1/participants', function(req, res, next) {
     repository.models.participant.findAll().then(function(participants) {
         return res.json(participants);
     });
 });
 
-// route: api: events/:id
-router.use('/api/v1/events/:id', function(req, res, next) {
-    repository.models.event.findById(req.params.id).then(function(event) {
+router.use('/api/v1/participants/:participant_id/events', function(req, res, next) {
+    repository.orm.query('SELECT DISTINCT A.* FROM events A JOIN exercices B ON (B.event_id = A.id) WHERE B.participant_id = :participant_id', {
+        replacements: {
+            participant_id: req.params.participant_id,
+        },
+        type: repository.orm.QueryTypes.SELECT
+    }).then(function(events) {
+        return res.json(events);
+    });
+});
+
+router.use('/api/v1/events/:event_id/participants', function(req, res, next) {
+    repository.orm.query('SELECT DISTINCT A.id, A.name, A.active FROM participants A JOIN exercices B ON (B.participant_id = A.id) WHERE B.event_id = :event_id', {
+        replacements: {
+            event_id: req.params.event_id,
+        },
+        type: repository.orm.QueryTypes.SELECT
+    }).then(function(participants) {
+        return res.json(participants);
+    });
+});
+
+router.use('/api/v1/events/:event_id/exercices', function(req, res, next) {
+    repository.models.exercice.findAll({
+        where: {
+            event_id: req.params.event_id,
+        }
+    }).then(function(exercices) {
+        return res.json(exercices);
+    });
+});
+
+router.use('/api/v1/events/:event_id', function(req, res, next) {
+    repository.models.event.findById(req.params.event_id).then(function(event) {
         return res.json(event);
     });
 });
 
-// route: api: events
 router.use('/api/v1/events', function(req, res, next) {
     repository.models.event.findAll().then(function(events) {
         return res.json(events);
     });
 });
 
-// route: api: exercices/:id
-router.use('/api/v1/exercices/:id', function(req, res, next) {
-    repository.models.exercice.findById(req.params.id).then(function(exercice) {
+router.use('/api/v1/exercices/:exercice_id', function(req, res, next) {
+    repository.models.exercice.findById(req.params.exercice_id).then(function(exercice) {
         return res.json(exercice);
     });
 });
 
-// route: api: exercices
 router.use('/api/v1/exercices', function(req, res, next) {
     repository.models.exercice.findAll().then(function(exercices) {
         return res.json(exercices);
