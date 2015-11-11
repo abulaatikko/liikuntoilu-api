@@ -8,7 +8,7 @@ var repository = require('./repository');
         if (!isNaN(parseFloat(input)) && isFinite(input) && input >= 0) {
             next();
         } else {
-            res.sendStatus(403);
+            res.status(400).send('400 Bad Request');
         }
     });
 });
@@ -55,7 +55,7 @@ router.get('/participants/:participant_id/events', function(req, res, next) {
     });
 });
 
-router.get('//events/:event_id/participants', function(req, res, next) {
+router.get('/events/:event_id/participants', function(req, res, next) {
     repository.orm.query('SELECT DISTINCT A.id, A.name, A.active FROM participants A JOIN exercices B ON (B.participant_id = A.id) WHERE B.event_id = :event_id', {
         replacements: {
             event_id: req.params.event_id,

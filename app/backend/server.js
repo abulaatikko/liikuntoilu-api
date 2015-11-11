@@ -15,12 +15,18 @@ app.use(router);
 // static files
 router.use(express.static(config.basePath + 'build'));
 
+// api routes
 var apiRoutes = require('./api-routes');
 app.use('/api/v1/', apiRoutes);
 
 // route: landing page
 router.get('/', function(req, res, next) {
     res.sendFile(config.basePath + 'app/frontend/index.html');
+});
+
+// route: the rest
+app.use(function(req, res, next) {
+    res.status(404).send('404 Not Found');
 });
 
 // launch server
