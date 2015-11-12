@@ -2,13 +2,14 @@
 var express = require('express');
 var app = express();
 
+// config
+var config = require('./config');
+
 // cache
 var cacher = require("cacher")
 var cache = new cacher();
-app.use(cache.cache('seconds', 10));
-
-// config
-var config = require('./config');
+cache.noCaching = config.debug;
+app.use(cache.cache('seconds', 60));
 
 // repository
 var repository = require('./repository');
