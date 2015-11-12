@@ -1,7 +1,7 @@
 {
   "name": "liikuntoilu.net",
   "version": "1.0.0",
-  "description": "",
+  "description": "API to liikuntoilu data",
   "main": "index.html",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -20,14 +20,16 @@
     "bower": "^1.6.5",
     "cacher": "^3.0.0",
     "express": "^4.13.3",
+    "mysql": "^2.9.0",
+    "sequelize": "^3.13.0"
+  },
+  "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-contrib-clean": "^0.6.0",
     "grunt-contrib-concat": "^0.5.1",
     "grunt-contrib-copy": "^0.8.2",
     "grunt-contrib-cssmin": "^0.14.0",
     "grunt-contrib-jshint": "^0.11.3",
-    "grunt-contrib-uglify": "^0.10.0",
-    "mysql": "^2.9.0",
-    "sequelize": "^3.13.0"
+    "grunt-contrib-uglify": "^0.10.0"
   }
 }
