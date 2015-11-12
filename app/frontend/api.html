@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="API documentation - Liikuntoilu">
+    <meta name="author" content="Lassi Heikkinen">
+    <link rel="icon" type="image/png" href="image/favicon.png" />
+
+    <title>API documentation - Liikuntoilu</title>
+
+    <link href="app.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+    <div class="container" style="max-width: 1200px">
+
+      <h1>API documentation (v1)</h1>
+
+      <p><em>Last updated: 2015-11-12</em></p>
+
+      <h2>General</h2>
+
+      <ul>
+          <li>Only GET methods</li>
+          <li>{id} can be 0 (bad practice)</li>
+          <li>Response cache is used. Observe Cache-Control HTTP header.</li>
+      </ul>
+
+      <h2>Methods</h2>
+
+      <h3>GET /api/v1/participants</h3>
+      <dl class="dl-horizontal">
+          <dt><abbr title="integer">id</abbr></dt>
+          <dd>Identifier of the participant.</dd>
+          <dt><abbr title="string">name</abbr></dt>
+          <dd>Name of the participant.</dd>
+          <dt><abbr title="boolean">active</abbr></dt>
+          <dd>Tells if the participant is active.</dd>
+      </dl>
+      <p>Example: <a href="http://liikuntoilu.net/api/v1/participants">http://liikuntoilu.net/api/v1/participants</a></p>
+      <p>List all the participants.</p>
+
+      <h3>GET /api/v1/participants/{id}</h3>
+
+    </div><!-- /container -->
+
+  </body>
+</html>
+
