@@ -9,7 +9,7 @@ var config = require('./config');
 var cacher = require("cacher")
 var cache = new cacher();
 cache.noCaching = config.debug;
-app.use(cache.cache('seconds', 60));
+app.use(cache.cache('seconds', config.cache.ttl));
 
 // repository
 var repository = require('./repository');
@@ -25,7 +25,12 @@ router.use(express.static(config.basePath + 'build'));
 var apiRoutes = require('./api-routes');
 app.use('/api/v1/', apiRoutes);
 
-// route: landing page
+// route: api landing page
+router.get('/api/', function(req, res, next) {
+    res.sendFile(config.basePath + 'app/frontend/api.html');
+});
+
+// route: main landing page
 router.get('/', function(req, res, next) {
     res.sendFile(config.basePath + 'app/frontend/index.html');
 });

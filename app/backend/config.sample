@@ -6,7 +6,9 @@ config.host = 'liikuntoilu.net';
 config.port = 3000;
 config.basePath = '/var/www/liikuntoilu.net';
 
-// mysql
+config.cache = {};
+config.cache.ttl = 60;
+
 config.mysql = {};
 config.mysql.host = 'localhost';
 config.mysql.database = 'liikuntoilu';
