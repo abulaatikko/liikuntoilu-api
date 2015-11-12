@@ -13,14 +13,6 @@ var repository = require('./repository');
     });
 });
 
-router.get('/participants/:exercice_id/exercices', function(req, res, next) {
-    repository.models.participant.findById(req.params.exercice_id).then(function(participant) {
-        participant.getExercices().then(function(exercices) {
-            return res.json(exercices);
-        });
-    });
-});
-
 router.get('/participants/:participant_id/events/:event_id/exercices', function(req, res, next) {
     repository.models.exercice.findAll({
         where: {
@@ -29,6 +21,25 @@ router.get('/participants/:participant_id/events/:event_id/exercices', function(
         }
     }).then(function(exercices) {
         return res.json(exercices);
+    });
+});
+
+router.get('/participants/:participant_id/events', function(req, res, next) {
+    repository.orm.query('SELECT DISTINCT A.* FROM events A JOIN exercices B ON (B.event_id = A.id) WHERE B.participant_id = :participant_id', {
+        replacements: {
+            participant_id: req.params.participant_id,
+        },
+        type: repository.orm.QueryTypes.SELECT
+    }).then(function(events) {
+        return res.json(events);
+    });
+});
+
+router.get('/participants/:exercice_id/exercices', function(req, res, next) {
+    repository.models.participant.findById(req.params.exercice_id).then(function(participant) {
+        participant.getExercices().then(function(exercices) {
+            return res.json(exercices);
+        });
     });
 });
 
@@ -41,17 +52,6 @@ router.get('/participants/:participant_id', function(req, res, next) {
 router.get('/participants', function(req, res, next) {
     repository.models.participant.findAll().then(function(participants) {
         return res.json(participants);
-    });
-});
-
-router.get('/participants/:participant_id/events', function(req, res, next) {
-    repository.orm.query('SELECT DISTINCT A.* FROM events A JOIN exercices B ON (B.event_id = A.id) WHERE B.participant_id = :participant_id', {
-        replacements: {
-            participant_id: req.params.participant_id,
-        },
-        type: repository.orm.QueryTypes.SELECT
-    }).then(function(events) {
-        return res.json(events);
     });
 });
 
