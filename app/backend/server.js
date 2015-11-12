@@ -4,7 +4,7 @@ var app = express();
 
 // cache
 var cacher = require("cacher")
-var cache = new Cacher();
+var cache = new cacher();
 app.use(cache.cache('seconds', 10));
 
 // config
