@@ -39,7 +39,11 @@ module.exports = function(grunt) {
                 dest: '.tmp/vendor.concat.js',
             },
             css: {
-                src: ['bower_components/**/*.css', 'app/**/*.css'],
+                src: [
+                    'bower_components/bootstrap/dist/css/bootstrap-theme.css',
+                    'bower_components/bootstrap/dist/css/bootstrap.css',
+                    'app/**/*.css',
+                ],
                 dest: '.tmp/app.concat.css',
             },
         },

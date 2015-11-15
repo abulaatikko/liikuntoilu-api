@@ -6,7 +6,7 @@ var app = express();
 var config = require('./config');
 
 // cache
-var cacher = require("cacher")
+var cacher = require("cacher");
 var cache = new cacher();
 cache.noCaching = config.debug;
 app.use(cache.cache('seconds', config.cache.ttl));
