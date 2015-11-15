@@ -1,6 +1,6 @@
 # liikuntoilu
 
-Old Liikuntoilu service (2006-2015) is shut down. Here is an API to the data.
+Old Liikuntoilu service (2006-2015) was shut down. Here is an API to the data.
 
 * http://liikuntoilu.net/
 * http://liikuntoilu.net/api/
