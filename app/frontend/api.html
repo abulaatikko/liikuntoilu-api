@@ -19,20 +19,21 @@
 
       <h1>API documentation (v1)</h1>
 
-      <p><em>Last updated: 2015-11-14</em></p>
+      <p><em>Last updated: 2015-11-15</em></p>
 
       <h2>General</h2>
 
       <ul>
           <li>Only <strong>GET</strong> methods supported.</li>
-          <li><strong>{..}</strong> in the URLs are placeholders for the dynamic data. Replace them by the real values when necessary.</li>
-          <li>{id} can be 0 (bad practice)</li>
-          <li>Response cache is used. Observe <strong>Cache-Control</strong> HTTP header.</li>
+          <li><strong>{id}</strong> in the URLs are placeholders for the dynamic data. Replace them by the real values when necessary.</li>
+          <li>id can be 0 (bad practice).</li>
+          <li>A response cache is used. Observe <strong>Cache-Control</strong> HTTP header.</li>
       </ul>
 
       <h2>Methods</h2>
 
-      <h3>GET /api/v1/participants</h3>
+      <a id="participants"></a>
+      <h3>GET /api/v1/participants/</h3>
       <p>The method returns all the participants.</p>
       <table class="table table-bordered table-striped">
         <thead>
@@ -54,14 +55,15 @@
           <tr>
             <td>active</td>
             <td>boolean</td>
-            <td>The field tells if the participant is active.</td>
+            <td>Field tells if the participant is active.</td>
           </tr>
         </tbody>
       </table>
-      <p>Example: <a href="http://liikuntoilu.net/api/v1/participants">http://liikuntoilu.net/api/v1/participants</a></p>
+      <p>Example: <a href="http://liikuntoilu.net/api/v1/participants/">http://liikuntoilu.net/api/v1/participants/</a></p>
 
-      <h3>GET /api/v1/participants/{id}</h3>
-      <p>The method returns one participant.</p>
+      <a id="events"></a>
+      <h3>GET /api/v1/events/</h3>
+      <p>The method returns all the events.</p>
       <table class="table table-bordered table-striped">
         <thead>
             <th>Field</th>
@@ -72,22 +74,117 @@
           <tr>
             <td>id</td>
             <td>integer</td>
-            <td>Identifier of the participant.</td>
+            <td>Identifier of the event.</td>
           </tr>
           <tr>
             <td>name</td>
             <td>string</td>
-            <td>Name of the participant.</td>
+            <td>Name of the event.</td>
           </tr>
           <tr>
             <td>active</td>
             <td>boolean</td>
-            <td>The field tells if the participant is active.</td>
+            <td>Field tells if the event is active.</td>
+          </tr>
+          <tr>
+            <td>default_speed</td>
+            <td>integer</td>
+            <td>Some events where distance information is relevant have a default speed which is used in the distance estimation calculation when the distance is not explicitly given in the submitted exercice data.</td>
           </tr>
         </tbody>
       </table>
-      <p>Example: <a href="http://liikuntoilu.net/api/v1/participants/0">http://liikuntoilu.net/api/v1/participants/0</a></p>
+      <p>Example: <a href="http://liikuntoilu.net/api/v1/events/">http://liikuntoilu.net/api/v1/events/</a></p>
 
+      <a id="exercices"></a>
+      <h3>GET /api/v1/exercices/</h3>
+      <p>The method returns all the exercices. The dataset has over 20000 rows so be patient.</p>
+      <table class="table table-bordered table-striped">
+        <thead>
+            <th>Field</th>
+            <th>Type</th>
+            <th>Description</th>
+        </thead>
+        <tbody>
+          <tr>
+            <td>id</td>
+            <td>integer</td>
+            <td>Identifier of the exercice.</td>
+          </tr>
+          <tr>
+            <td>created</td>
+            <td>string</td>
+            <td>Moment when the exercice was stored in the database. ISO 8601 date format in UTC timezone.</td>
+          </tr>
+          <tr>
+            <td>started</td>
+            <td>string</td>
+            <td>Moment when the exercice was begun. ISO 8601 date format in UTC timezone.</td>
+          </tr>
+          <tr>
+            <td>participant_id</td>
+            <td>integer</td>
+            <td>Performer of the exercice. Foreign key to <a href="#participants">participants</a> data.</td>
+          </tr>
+          <tr>
+            <td>event_id</td>
+            <td>integer</td>
+            <td>Event of the exercice. Foreign key to <a href="#events">events</a> data.</td>
+          </tr>
+          <tr>
+            <td>pace</td>
+            <td>integer</td>
+            <td>Pace of the exercice. 0 = normal, 1 = high, 2 = low.</td>
+          </tr>
+          <tr>
+            <td>comment</td>
+            <td>string</td>
+            <td>Comment about the exercice.</td>
+          </tr>
+          <tr>
+            <td>distance</td>
+            <td>string</td>
+            <td>Travelled distance of the exercice in metres when it's approriate (= event is running, swimming etc.). </td>
+          </tr>
+          <tr>
+            <td>duration</td>
+            <td>integer</td>
+            <td>Field tells how long the exercice lasted in minutes.</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>Example: <a href="http://liikuntoilu.net/api/v1/exercices/">http://liikuntoilu.net/api/v1/exercices/</a></p>
+
+      <h3>GET /api/v1/participants/{id}/</h3>
+      <p>The method returns one participant. The response fields are the same as in the <a href="#participants">participants</a> data.</p>
+      <p>Example: <a href="http://liikuntoilu.net/api/v1/participants/0/">http://liikuntoilu.net/api/v1/participants/0/</a></p>
+
+      <h3>GET /api/v1/participants/{id}/events/</h3>
+      <p>The method returns all the events which the participant has ever performed. The response fields are the same as in the <a href="#events">events</a> data.</p>
+      <p>Example: <a href="http://liikuntoilu.net/api/v1/participants/0/events/">http://liikuntoilu.net/api/v1/participants/0/events/</a></p>
+
+      <h3>GET /api/v1/participants/{id}/exercices/</h3>
+      <p>The method returns all the exercices of the participant. The response fields are the same as in the <a href="#exercices">exercices</a> data.</p>
+      <p>Example: <a href="http://liikuntoilu.net/api/v1/participants/0/exercices/">http://liikuntoilu.net/api/v1/participants/0/exercices/</a></p>
+
+      <h3>GET /api/v1/participants/{id}/events/{id}/exercices/</h3>
+      <p>The method returns all the exercices of the participant in the specific event. The response fields are the same as in the <a href="#exercices">exercices</a> data.</p>
+      <p>Example: <a href="http://liikuntoilu.net/api/v1/participants/0/events/6/exercices/">http://liikuntoilu.net/api/v1/participants/0/events/6/exercices/</a></p>
+
+      <h3>GET /api/v1/events/{id}/</h3>
+      <p>The method returns one event. The response fields are the same as in the <a href="#events">events</a> data.</p>
+      <p>Example: <a href="http://liikuntoilu.net/api/v1/events/6/">http://liikuntoilu.net/api/v1/events/6/</a></p>
+
+      <h3>GET /api/v1/events/{id}/participants/</h3>
+      <p>The method returns all the participants who have performed at least one exercice in the specific event. The response fields are the same as in the <a href="#participants">participants</a> data.</p>
+      <p>Example: <a href="http://liikuntoilu.net/api/v1/events/6/participants/">http://liikuntoilu.net/api/v1/events/6/participants/</a></p>
+
+      <h3>GET /api/v1/events/{id}/exercices/</h3>
+      <p>The method returns all the exercices which have been performed in the specific event. The response fields are the same as in the <a href="#exercices">exercices</a> data.</p>
+      <p>Example: <a href="http://liikuntoilu.net/api/v1/events/6/exercices/">http://liikuntoilu.net/api/v1/events/6/exercices/</a></p>
+
+      <h3>GET /api/v1/exercices/{id}/</h3>
+      <p>The method returns one exercice. The response fields are the same as in the <a href="#exercices">exercices</a> data.</p>
+      <p>Example: <a href="http://liikuntoilu.net/api/v1/exercices/1234/">http://liikuntoilu.net/api/v1/exercices/1234/</a></p>
 
     </div><!-- /container -->
 
