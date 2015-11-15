@@ -1,18 +1,16 @@
 module.exports = function(grunt) {
 
     grunt.initConfig({
-        pkg: grunt.file.readJSON('package.json'),
-		
         clean: {
             tmp: [".tmp/*"],
-            build: ["build/*"]
+            build: ["build/*"],
         },
         jshint: {
             files: [
                 'Gruntfile.js',
                 'app/frontend/**/*.js',
-                'app/backend/**/*.js'
-            ]
+                'app/backend/**/*.js',
+            ],
         },
         copy: {
             dev: {
@@ -21,7 +19,7 @@ module.exports = function(grunt) {
                     {src: '.tmp/app.concat.css', dest: 'build/app.css'},
                     {expand: true, cwd: 'bower_components/bootstrap/', src: 'fonts/**', dest: 'build/'},
                     {expand: true, cwd: 'app/frontend/', src: 'image/**', dest: 'build/'},
-                ]
+                ],
             },
             dist: {
                 files: [
@@ -29,8 +27,8 @@ module.exports = function(grunt) {
                     {src: '.tmp/app.min.css', dest: 'build/app.css'},
                     {expand: true, cwd: 'bower_components/bootstrap/', src: 'fonts/**', dest: 'build/'},
                     {expand: true, cwd: 'app/frontend/', src: 'image/**', dest: 'build/'},
-                ]
-            }
+                ],
+            },
         },
         concat: {
             js_vendor: {
@@ -38,19 +36,24 @@ module.exports = function(grunt) {
                     'bower_components/jquery/dist/jquery.js',
                     'bower_components/bootstrap/dist/js/bootstrap.js',
                 ],
-                dest: '.tmp/vendor.concat.js'
+                dest: '.tmp/vendor.concat.js',
             },
             css: {
                 src: ['bower_components/**/*.css', 'app/**/*.css'],
-                dest: '.tmp/app.concat.css'
-            }
+                dest: '.tmp/app.concat.css',
+            },
         },
         uglify: {
-            files: {src: ['.tmp/vendor.concat.js'], dest: '.tmp/app.min.js'}
+            files: {src: ['.tmp/vendor.concat.js'], dest: '.tmp/app.min.js'},
         },
         cssmin: {
-            files: {src: ['.tmp/app.concat.css'], dest: '.tmp/app.min.css'}
-        }
+            files: {src: ['.tmp/app.concat.css'], dest: '.tmp/app.min.css'},
+        },
+        mochaTest: {
+            test: {
+                src: ['test/*.js'],
+            },
+        },
     });
 	
     grunt.loadNpmTasks('grunt-contrib-clean');
@@ -59,6 +62,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-mocha-test');
 
     grunt.registerTask('dev', [
         'clean:tmp',
@@ -76,6 +80,10 @@ module.exports = function(grunt) {
         'cssmin',
         'clean:build',
         'copy:dist'
+    ]);
+
+    grunt.registerTask('test', [
+        'mochaTest',
     ]);
 
     grunt.registerTask('concat_all', [
