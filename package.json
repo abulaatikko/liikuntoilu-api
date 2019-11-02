@@ -21,7 +21,7 @@
     "cacher": "^3.0.0",
     "express": "^4.13.3",
     "mysql": "^2.9.0",
-    "sequelize": "^3.13.0"
+    "sequelize": "^5.21.2"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
