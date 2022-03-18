@@ -14,7 +14,7 @@ Old Liikuntoilu service (2006-2015) was shut down. Here is an API to the data.
 
 ## Installation
 
-1. git clone https://github.com/lassiheikkinen/liikuntoilu.git
+1. git clone https://github.com/abulaatikko/liikuntoilu.git
 2. schema.sql
 3. cp app/backend/config.sample app/backend/config.js; vim app/backend/config.js
 4. npm install
